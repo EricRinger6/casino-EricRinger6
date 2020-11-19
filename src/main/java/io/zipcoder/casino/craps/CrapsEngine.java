@@ -10,6 +10,8 @@ public class CrapsEngine {
     Player player;
     Menu menu;
 
+
+
     // Only bet in whole numbers
 
     private void playerMoney() {
@@ -39,7 +41,8 @@ public class CrapsEngine {
                 bets.dontPass();
                 break;
             default:
-                console.println("pick a valid Integer");
+               comeoutRollMenu();
+               break;
         }
     }
 
