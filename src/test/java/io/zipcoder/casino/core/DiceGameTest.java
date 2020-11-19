@@ -21,16 +21,17 @@ public class DiceGameTest {
 
     @Test
     public void tossAndList() {
-        //given
-        Integer expectedMax = 6;
+        /*Integer expectedMax = 6;
         Integer expectedMin = 1;
         //when
         ArrayList<Integer> tossList = diceToss.tossAndList();
-        //then
+
         for (Integer x: tossList) {
             assertTrue(x <= 6);
             assertTrue(x >= 1);
         }
+        //then*/
+
     }
 
 /*    @Test //making sure the values are 1 to 6

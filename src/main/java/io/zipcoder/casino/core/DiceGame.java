@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 public class DiceGame {
-    private Integer diceNum;
+    public Integer diceNum;
 
    /* private HashMap<Integer, Integer> diceRollMap;
     private HashMap<Integer, Integer> diceSavedMap;*/
@@ -12,13 +12,13 @@ public class DiceGame {
     public DiceGame(){
     }
 
-    public DiceGame(Integer diceNum){
-        this.diceNum = diceNum;
- /*       diceRollMap = new HashMap<Integer, Integer>();
+    public DiceGame(Integer diceNum)
+    { this.diceNum = diceNum;
+    /*    diceRollMap = new HashMap<Integer, Integer>();
         diceSavedMap = new HashMap<Integer, Integer>();*/
-    }
+   }
 
-    public ArrayList<Integer> tossAndList() {
+    public ArrayList<Integer> tossAndList(Integer diceNum){
         ArrayList<Integer> tossList = new ArrayList<Integer>();
         for (int i = 1; i <= diceNum; i++) {
             tossList.add(1+(int)(Math.random()*6));
