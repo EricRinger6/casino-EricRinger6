@@ -31,7 +31,7 @@ public class GoFish {
 
 
         console.println("Welcome to Go Fish. ");
-
+        console.println("        /\\" + "\n      _/./" + "\n   ,-'    `-:.,-'/" + "\n  > O )<)    _  (" + "\n `-._  _.:' `-.\\" + "\n     `` \\;");
         while(playerPairs + aiPairs < 26){
 
             turnPlayer();
@@ -119,7 +119,8 @@ public class GoFish {
             }
 
         } while(playing);
-        console.println("Go fish!");
+          console.println("Go fish!" + "\n      /`·.¸" + "\n     /¸...¸`:·" + "\n ¸.·´  ¸   `·.¸.·´)" + "\n: © ):´;      ¸  {" + "\n `·.¸ `·  ¸.·´\\`·¸)"
+                + "\n     `\\\\´´\\¸.·´");
         fish(playerHand);
     }
 
@@ -151,7 +152,8 @@ public class GoFish {
                 playing = false;
             }
         } while(playing);
-        console.println("Go fish!");
+        console.println("Go fish!" + "\n      /`·.¸" + "\n     /¸...¸`:·" + "\n ¸.·´  ¸   `·.¸.·´)" + "\n: © ):´;      ¸  {" + "\n `·.¸ `·  ¸.·´\\`·¸)"
+                + "\n     `\\\\´´\\¸.·´");
         fish(aiHand);
     }
 

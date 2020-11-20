@@ -23,26 +23,7 @@ public class CeeloEngineTest {
     public void tearDown() throws Exception {
     }
 
-    @Test
-    public void determineWinner1() {
-        String expected = "You lose!";
-        Integer comboType = 0;
-
-        String actual = ceelo.determineWinner(comboType);
-
-        assertEquals(expected,actual);
-    }
-
-    @Test
-    public void determineWinner2() {
-        String expected = "YOU WIN!";
-        Integer comboType = 1;
-
-        String actual = ceelo.determineWinner(comboType);
-
-        assertEquals(expected,actual);
-    }
-
+    
     @Test
     public void checkResult() {
         Integer[] playerArr = {3,3,3};

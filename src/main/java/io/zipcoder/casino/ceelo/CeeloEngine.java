@@ -4,6 +4,7 @@ import io.zipcoder.casino.utilities.Console;
 import io.zipcoder.casino.utilities.Menu;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class CeeloEngine {
@@ -28,7 +29,6 @@ public class CeeloEngine {
         diceTossedComp = new ArrayList<Integer>();
         compare = new Integer[2];
         comboType = 2;
-        whoseTurn = 0;
 ;    }
 
     public void userPressOne() {
@@ -37,21 +37,32 @@ public class CeeloEngine {
             promptRoll();
             whoseTurn = 0;
             diceTossedPlayer = Toss();
-            if(comboType == 0){ //checks if player toss is auto win or lose
+            if(comboType == 0 && whoseTurn == 0){ //checks if player is auto win
                 console.println(menu.youWon());
-                break;
+                isPlaying = tryAgain();
             }
-            if(comboType == 1){
+            else if(comboType == 1 && whoseTurn == 0){ //checks if player is auto loss
                 console.println(menu.youLose());
-                break;
+                isPlaying = tryAgain();
+                //break;
             }
-            else{
+            else{ // you rolled a point or a triple, computer's turn to roll
                 whoseTurn = 1;
                 diceTossedComp = Toss();
-            }
-            console.println(determineWinner(comboType));
-            if(compareToss(compare, diceTossedPlayer,diceTossedComp) != 2) {
-                isPlaying = tryAgain();
+
+                if(comboType == 0 && whoseTurn == 1 ){ //computer auto win
+                    console.println(menu.youLose());
+                    isPlaying = tryAgain();
+                }
+                else if (comboType == 1 && whoseTurn == 1){ //computer auto lose
+                    console.println(menu.youWon());
+                    isPlaying = tryAgain();
+                }
+                else { //determine winner base on triple and point;
+                    console.println(determineWinner());
+                    if(compareToss(compare, diceTossedPlayer,diceTossedComp) != 2)
+                        isPlaying = tryAgain();
+                }
             }
         }
     }
@@ -62,6 +73,9 @@ public class CeeloEngine {
         while (loop) {
             Integer userInput = console.getIntegerInput(menu.playAgain());
             if (userInput == 1) {
+                compare[0] = 4;
+                compare[1] = 4;
+                comboType = 4; //reset combo type to arbitrary number other than 0 and 1 to not trip
                 loop = false;
             }
             else if(userInput == 2){
@@ -72,15 +86,9 @@ public class CeeloEngine {
         return playAgain;
     }
 
-    public String determineWinner(Integer comboType){
+    public String determineWinner(){
         String result = "";
-        if(comboType == 0){
-            result = menu.youLose();
-        }
-        else if (comboType == 1){
-            result = menu.youWon();
-        }
-        else if(compareToss(compare,diceTossedPlayer,diceTossedComp) == 0){
+        if(compareToss(compare,diceTossedPlayer,diceTossedComp) == 0){
             result = menu.youWon();
         }
         else if(compareToss(compare,diceTossedPlayer,diceTossedComp) == 1){
@@ -105,12 +113,12 @@ public class CeeloEngine {
     }
 
     public ArrayList<Integer> Toss(){
-        //Integer[]x = {2,2,2};
+        //Integer[]x = {1,2,3};
         //ArrayList<Integer> y = new ArrayList<Integer>(Arrays.asList(x));
         ArrayList<Integer> result = new ArrayList<Integer>();
         boolean loop = true;
         while(loop){
-            result = game.tossAndList(diceNum);   //sub for debug, game.tossAndList(diceNum)
+            result = game.tossAndList(diceNum);   //to debug, sub game.tossAndList(diceNum) for y;
             if (whoseTurn == 1) {
                 delay();
             }
@@ -118,7 +126,7 @@ public class CeeloEngine {
             if (whoseTurn == 1) {
                 delay();
             }
-            if(checkResult(result, whoseTurn)){
+            if(checkResult(result, whoseTurn)){ //did not toss a unique combo, returns true, prompts "got nothing" then keep looping
                 if (whoseTurn == 0) {
                     Integer userInput = console.getIntegerInput(menu.gotNothing());
                 }
@@ -133,12 +141,10 @@ public class CeeloEngine {
     public boolean checkResult(ArrayList<Integer> result,Integer whoseTurn) {
     boolean loop = true;
         if (game.checkAutoWin(result)) {
-            //console.println(menu.youWon());
             comboType = 0;
             loop = false;
         }
         else if (game.checkAutoLose(result)) {
-            //console.println(menu.youLose());
             comboType = 1;
             loop = false;
         }
@@ -153,14 +159,14 @@ public class CeeloEngine {
             loop = false;
         }
         else if (game.checkTriple(result)) {
-                if(whoseTurn == 0) {
-                    console.println(menu.triplePrompt());
-                    compare[0] = 2;
-                }
-                else{
-                    console.println(menu.compTriple());
-                    compare[1] = 2;
-                }
+            if(whoseTurn == 0) {
+                console.println(menu.triplePrompt());
+                compare[0] = 2;
+            }
+            else{
+                console.println(menu.compTriple());
+                compare[1] = 2;
+            }
             loop = false;
         }
         return loop;
@@ -168,17 +174,17 @@ public class CeeloEngine {
 
     public Integer compareToss(Integer[] compare, ArrayList<Integer>player1, ArrayList<Integer>player2) {
         Integer winner = 2;
-        if(compare[0] > compare[1]){
+        if(compare[0] > compare[1]){ //player 1 has triple, player 2 has point, player 1 wins
             winner = 0;
         }
-        else if (compare[0] < compare[1]){
+        else if (compare[0] < compare[1]){ //player 2 has triple, player 1 has point, player 2 wins
             winner = 1;
         }
-        else {
-            if(compare[0] == 2){
+        else { //both have triple or points
+            if(compare[0] == 2){ //both players have triples, compare triples
                 winner = compareTriples(player1, player2);
             }
-            else{
+            else{ //both players have points, compare points
                 winner =comparePoints(player1, player2);
             }
         }
@@ -191,10 +197,10 @@ public class CeeloEngine {
         Integer compSingleton = 0;
         for(int i = 0; i<player1.size();i++){
             if(Collections.frequency(player1, player1.get(i))==1){
-                playerSingleton = player1.get(i);
+                playerSingleton = player1.get(i); //gets the single dice value that is not a pair for player 1
             }
             if(Collections.frequency(player2,player2.get(i))==1){
-                compSingleton = player2.get(i);
+                compSingleton = player2.get(i); //gets the single dice value that is not a pair for player 2
             }
         }
         if(playerSingleton>compSingleton){
@@ -207,11 +213,11 @@ public class CeeloEngine {
     }
 
     public Integer compareTriples(ArrayList<Integer> player1, ArrayList<Integer> player2) {
-        Integer winner = 2;
-        if(player1.get(0)>player2.get(0)){
+        Integer winner = 2; // tie in triple
+        if(player1.get(0)>player2.get(0)){ //player 1 wins triple
             winner = 0;
         }
-        else if (player1.get(0)<player2.get(0)){
+        else if (player1.get(0)<player2.get(0)){ //player 2 wins triple
             winner = 1;
         }
         return winner;
@@ -219,7 +225,7 @@ public class CeeloEngine {
 
     public void delay() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(750);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
